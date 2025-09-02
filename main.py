@@ -1,29 +1,24 @@
-from window import Window
-from point import Point
-from line import Line
+from graphics import Window
+from cell import Cell
 
 def main():
     win = Window(800, 600)
 
-    start_point = Point(0, 0)
-    end_point = Point(100, 100)
+    x_point1 = 100
+    y_point1 = 100
+    x_point2 = 200
+    y_point2 = 200
 
-    line1 = Line(start_point, end_point)
+    cell1 = Cell(win)
+    cell2 = Cell(win)
+    
+    cell1.has_bottom_wall = False
+    cell1.draw(x_point1, y_point1, x_point2, y_point2)
 
-    start_point = Point(100, 100)
-    end_point = Point(200, 100)
+    cell2.has_top_wall = False
+    cell2.draw(x_point2, y_point2, x_point2+100, y_point2+100)
 
-    line2 = Line(start_point, end_point)
-
-    start_point = Point(200, 100)
-    end_point = Point(300, 300)
-
-    line3 = Line(start_point, end_point)
-
-    win.draw_line(line1)
-    win.draw_line(line2)
-    win.draw_line(line3)
-
+    cell1.draw_move(cell2, False)
 
     win.wait_for_close()
 
