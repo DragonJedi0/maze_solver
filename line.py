@@ -6,7 +6,7 @@ class Line():
         self.__start_point = start_point
         self.__end_point = end_point
 
-    def draw(self, canvas: Canvas, fill: str):
+    def draw(self, canvas: Canvas, fill="black"):
         canvas.create_line(self.__start_point.x, self.__start_point.y,
                            self.__end_point.x, self.__end_point.y,
                            fill=fill, width=2)
