@@ -1,11 +1,13 @@
 from tkinter import Tk, BOTH, Canvas
+from point import Point
+from line import Line
 
 class Window():
     def __init__(self, width, height):
         # Create root using Tk
         self.__root = Tk()
         # Set root's title
-        self.__root.title = "Maze Solver"
+        self.__root.title("Maze Solver")
         # Create Canvas using Canvas(root, bg, height, width)
         self.__canvas = Canvas(self.__root, bg="white", height=height, width=width)
         # Pack the canvas using pack(fill=BOTH, expand=1)
@@ -23,7 +25,10 @@ class Window():
         self.__running = True
         while (self.__running):
             self.redraw()
-        print(f"{self.__root.title} has been closed")
+        print("Maze Solver has been closed")
 
     def close(self):
         self.__running = False
+
+    def draw_line(self, line: Line, fill: str):
+        line.draw(self.__canvas, fill)
