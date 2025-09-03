@@ -1,3 +1,4 @@
+import time
 from graphics import Window
 from cell import Cell
 
@@ -17,7 +18,7 @@ class Maze():
         self.num_cols = num_cols
         self.cell_size_x = cell_size_x
         self.cell_size_y = cell_size_y
-        self.win = win
+        self.win: Window = win
         self.__cells = []
         self.__create_cells()
 
@@ -32,20 +33,17 @@ class Maze():
                 self.__draw_cell(i, j)
 
     def __draw_cell(self, i, j):
-        print(f"Cell [{i}][{j}] at ({self.x1}, {self.y1})")
-        # Calculate current cell position
-        pos_x1 = self.x1
-        pos_x2 = self.x1 + self.cell_size_x
-        pos_y1 = self.y1
-        pos_y2 = self.y1 + self.cell_size_y
+        # Calculate cell position
+        pos_x1 = self.x1 + (self.cell_size_x * i)
+        pos_x2 = pos_x1 + self.cell_size_x
+        pos_y1 = self.y1 + (self.cell_size_y * j)
+        pos_y2 = pos_y1 + self.cell_size_y
+        print(f"Drawing Cell [{i}][{j}] at ({pos_x1}, {pos_y1})")
         # Draw cell 
         self.__cells[i][j].draw(pos_x1, pos_y1, pos_x2, pos_y2)
-        # Update next cell position
-        self.x1 = (self.cell_size_x * i)
-        if (j == 0):
-            self.y1 = self.cell_size_y
-        else:
-            self.y1 = (self.cell_size_y * (j + 1))
 
-        #TODO: call self.__animate()
+        self.__animate()
 
+    def __animate(self):
+        self.win.redraw()
+        time.sleep(0.005)
