@@ -28,6 +28,8 @@ class Maze():
             for j in range(self.num_rows):
                 self.__cells[i].append(Cell(self.win))
 
+        self.__break_entrance_and_exit()
+
         for i in range(self.num_cols):
             for j in range(self.num_rows):
                 self.__draw_cell(i, j)
@@ -48,3 +50,11 @@ class Maze():
         if (self.win is not None):
             self.win.redraw()
         time.sleep(0.005)
+
+    def __break_entrance_and_exit(self):
+        last_row = len(self.__cells) - 1
+        last_col = len(self.__cells[last_row]) - 1
+        # Remove top left cell wall as entrance
+        self.__cells[0][0].has_top_wall = False
+        # Remove bottom right cell wall as exit
+        self.__cells[last_row][last_col].has_bottom_wall = False
