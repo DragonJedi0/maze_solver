@@ -1,4 +1,4 @@
-import time
+import time, random
 from graphics import Window
 from cell import Cell
 
@@ -11,6 +11,7 @@ class Maze():
                  cell_size_x,
                  cell_size_y,
                  win: Window=None,
+                 seed=None,
         ):
         self.x1 = x1
         self.y1 = y1
@@ -19,6 +20,10 @@ class Maze():
         self.cell_size_x = cell_size_x
         self.cell_size_y = cell_size_y
         self.win = win
+        if (seed is not None):
+            self.seed = random.seed(seed)
+        else:
+            self.seed = random.seed()
         self.__cells = []
         self.__create_cells()
 
@@ -58,3 +63,14 @@ class Maze():
         self.__cells[0][0].has_top_wall = False
         # Remove bottom right cell wall as exit
         self.__cells[last_row][last_col].has_bottom_wall = False
+
+    def __break_walls_r(self, i, j):
+        self.__cells[i][j].visted = True
+        inf = True
+        while(inf):
+            unvisted_col = []
+            unvisted_row = []
+            try:
+                pass
+            except IndexError as e:
+                pass
