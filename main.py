@@ -2,10 +2,10 @@ from graphics import Window
 from maze import Maze
 
 def main():
-    win = Window(800, 600)
+    win = Window(900, 700)
 
-    start_x = 0
-    start_y = 0
+    start_x = 50
+    start_y = 50
     maze_width = 12
     maze_height = 16
     cell_width = 50
