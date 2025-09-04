@@ -6,18 +6,19 @@ def main():
 
     start_x = 50
     start_y = 50
-    maze_width = 12
-    maze_height = 16
+    maze_height = 12
+    maze_width = 16
     cell_width = 50
     cell_height = 50
 
     Maze(start_x,
          start_y,
-         maze_width,
          maze_height,
+         maze_width,
          cell_width,
          cell_height,
-         win
+         win,
+         seed=None
         )
 
     win.wait_for_close()

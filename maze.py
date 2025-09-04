@@ -21,9 +21,7 @@ class Maze():
         self.cell_size_y = cell_size_y
         self.win = win
         if (seed is not None):
-            self.seed = random.seed(seed)
-        else:
-            self.seed = random.seed()
+            random.seed(seed)
         self.__cells = []
         self.__create_cells()
 
@@ -38,6 +36,8 @@ class Maze():
         for i in range(self.num_cols):
             for j in range(self.num_rows):
                 self.__draw_cell(i, j)
+
+        self.__break_walls_r(0, 0)
 
     def __draw_cell(self, i, j):
         # Calculate cell position
@@ -65,12 +65,45 @@ class Maze():
         self.__cells[last_row][last_col].has_bottom_wall = False
 
     def __break_walls_r(self, i, j):
-        self.__cells[i][j].visted = True
-        inf = True
-        while(inf):
-            unvisted_col = []
-            unvisted_row = []
-            try:
-                pass
-            except IndexError as e:
-                pass
+        self.__cells[i][j].visited = True
+        while True:
+            unvisted = []
+            # Check Left
+            if i - 1 >= 0 and self.__cells[i-1][j].visited == False:
+                unvisted.append((i-1,j))
+            # Check Right
+            if i + 1 < len(self.__cells) and self.__cells[i+1][j].visited == False:
+                unvisted.append((i+1,j))
+            # Check Top
+            if j -1 >= 0 and self.__cells[i][j-1].visited == False:
+                unvisted.append((i,j-1))
+            # Check Bottom
+            if j + 1 < len(self.__cells[i]) and self.__cells[i][j+1].visited == False:
+                unvisted.append((i,j+1))
+
+            if unvisted == []:
+                self.__draw_cell(i, j)
+                return
+            else:
+                dir = random.randint(0,len(unvisted)-1)
+
+            col, row = unvisted[dir]
+
+            # Move Left
+            if col < i:
+                self.__cells[i][j].has_left_wall = False
+                self.__cells[col][row].has_right_wall = False
+            # Move Right
+            elif col > i:
+                self.__cells[i][j].has_right_wall = False
+                self.__cells[col][row].has_left_wall = False
+            # Move Top
+            elif row < j:
+                self.__cells[i][j].has_top_wall = False
+                self.__cells[col][row].has_bottom_wall = False
+            # Move Bottom
+            else:
+                self.__cells[i][j].has_bottom_wall = False
+                self.__cells[col][row].has_top_wall = False
+
+            self.__break_walls_r(col, row)
