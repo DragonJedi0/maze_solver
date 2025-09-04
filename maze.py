@@ -28,6 +28,7 @@ class Maze():
         self.__create_cells()
         self.__break_entrance_and_exit()
         self.__break_walls_r(0, 0)
+        self.__reset_cells_visited()
 
     def __create_cells(self):
         for i in range(self.__num_cols):
@@ -106,3 +107,14 @@ class Maze():
                 self.__cells[i][j+1].has_top_wall = False
 
             self.__break_walls_r(col, row)
+
+    def __reset_cells_visited(self):
+        for row in self.__cells:
+            for col in row:
+                col.visited = False
+
+    def solve(self):
+        self._solve_r()
+
+    def _solve_r(self):
+        print("I can't see the maze yet, you dingus.")

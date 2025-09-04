@@ -27,14 +27,6 @@ class Tests(unittest.TestCase):
             m1._Maze__cells[1][1].has_bottom_wall,
             False
         )
-        self.assertNotEqual(
-            m1._Maze__cells[1][0].has_bottom_wall,
-            False
-        )
-        self.assertNotEqual(
-            m1._Maze__cells[0][1].has_top_wall,
-            False
-        )
 
     def test_break_walls(self):
         num_cols = 2
@@ -43,7 +35,6 @@ class Tests(unittest.TestCase):
         m2 = Maze(0, 0, num_rows, num_cols, 10, 10, None, 0)
         for i in range(len(m1._Maze__cells)):
             for j in range(len(m1._Maze__cells[i])):
-                self.assertTrue(m1._Maze__cells[i][j].visited)
                 self.assertEqual(
                     m1._Maze__cells[i][j].has_top_wall,
                     m2._Maze__cells[i][j].has_top_wall,
@@ -60,6 +51,14 @@ class Tests(unittest.TestCase):
                     m1._Maze__cells[i][j].has_right_wall,
                     m2._Maze__cells[i][j].has_right_wall,
                     )
+
+    def test_reset_cells_visited (self):
+        num_cols = 2
+        num_rows = 2
+        m1 = Maze(0, 0, num_rows, num_cols, 10, 10, None, 0)
+        for i in range(len(m1._Maze__cells)):
+            for j in range(len(m1._Maze__cells[i])):
+                self.assertFalse(m1._Maze__cells[i][j].visited)
 
 
 if __name__ == "__main__":

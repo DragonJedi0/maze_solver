@@ -10,7 +10,7 @@ def main():
     cell_width = 50
     cell_height = 50
 
-    Maze(margin,
+    maze = Maze(margin,
          margin,
          maze_height,
          maze_width,
@@ -19,6 +19,13 @@ def main():
          win,
          seed=None
         )
+    print("Maze created")
+
+    is_solvable = maze.solve()
+    if not is_solvable:
+        print("Maze is not solveable")
+    else:
+        print("Maze is solveable")
 
     win.wait_for_close()
 
