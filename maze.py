@@ -13,47 +13,46 @@ class Maze():
                  win: Window=None,
                  seed=None,
         ):
-        self.x1 = x1
-        self.y1 = y1
-        self.num_rows = num_rows
-        self.num_cols = num_cols
-        self.cell_size_x = cell_size_x
-        self.cell_size_y = cell_size_y
-        self.win = win
+        self.__cells = []
+        self.__x1 = x1
+        self.__y1 = y1
+        self.__num_rows = num_rows
+        self.__num_cols = num_cols
+        self.__cell_size_x = cell_size_x
+        self.__cell_size_y = cell_size_y
+        self.__win = win
+
         if (seed is not None):
             random.seed(seed)
-        self.__cells = []
+
         self.__create_cells()
+        self.__break_entrance_and_exit()
+        self.__break_walls_r(0, 0)
 
     def __create_cells(self):
-        for i in range(self.num_cols):
+        for i in range(self.__num_cols):
             self.__cells.append([])
-            for j in range(self.num_rows):
-                self.__cells[i].append(Cell(self.win))
+            for j in range(self.__num_rows):
+                self.__cells[i].append(Cell(self.__win))
 
-        self.__break_entrance_and_exit()
-
-        for i in range(self.num_cols):
-            for j in range(self.num_rows):
+        for i in range(self.__num_cols):
+            for j in range(self.__num_rows):
                 self.__draw_cell(i, j)
-
-        self.__break_walls_r(0, 0)
 
     def __draw_cell(self, i, j):
         # Calculate cell position
-        pos_x1 = self.x1 + (self.cell_size_x * i)
-        pos_x2 = pos_x1 + self.cell_size_x
-        pos_y1 = self.y1 + (self.cell_size_y * j)
-        pos_y2 = pos_y1 + self.cell_size_y
-        # print(f"Drawing Cell [{i}][{j}] at ({pos_x1}, {pos_y1})")
+        pos_x1 = self.__x1 + (self.__cell_size_x * i)
+        pos_x2 = pos_x1 + self.__cell_size_x
+        pos_y1 = self.__y1 + (self.__cell_size_y * j)
+        pos_y2 = pos_y1 + self.__cell_size_y
         # Draw cell 
         self.__cells[i][j].draw(pos_x1, pos_y1, pos_x2, pos_y2)
 
         self.__animate()
 
     def __animate(self):
-        if (self.win is not None):
-            self.win.redraw()
+        if (self.__win is not None):
+            self.__win.redraw()
         time.sleep(0.005)
 
     def __break_entrance_and_exit(self):
@@ -67,43 +66,43 @@ class Maze():
     def __break_walls_r(self, i, j):
         self.__cells[i][j].visited = True
         while True:
-            unvisted = []
+            unvisited = []
             # Check Left
             if i - 1 >= 0 and self.__cells[i-1][j].visited == False:
-                unvisted.append((i-1,j))
+                unvisited.append((i-1,j))
             # Check Right
             if i + 1 < len(self.__cells) and self.__cells[i+1][j].visited == False:
-                unvisted.append((i+1,j))
+                unvisited.append((i+1,j))
             # Check Top
             if j -1 >= 0 and self.__cells[i][j-1].visited == False:
-                unvisted.append((i,j-1))
+                unvisited.append((i,j-1))
             # Check Bottom
             if j + 1 < len(self.__cells[i]) and self.__cells[i][j+1].visited == False:
-                unvisted.append((i,j+1))
+                unvisited.append((i,j+1))
 
-            if unvisted == []:
+            if unvisited == []:
                 self.__draw_cell(i, j)
                 return
             else:
-                dir = random.randint(0,len(unvisted)-1)
+                dir = random.randint(0,len(unvisited)-1)
 
-            col, row = unvisted[dir]
+            col, row = unvisited[dir]
 
             # Move Left
-            if col < i:
+            if col == i - 1:
                 self.__cells[i][j].has_left_wall = False
-                self.__cells[col][row].has_right_wall = False
+                self.__cells[i-1][j].has_right_wall = False
             # Move Right
-            elif col > i:
+            elif col == i + 1:
                 self.__cells[i][j].has_right_wall = False
-                self.__cells[col][row].has_left_wall = False
+                self.__cells[i+1][j].has_left_wall = False
             # Move Top
-            elif row < j:
+            elif row == j - 1:
                 self.__cells[i][j].has_top_wall = False
-                self.__cells[col][row].has_bottom_wall = False
+                self.__cells[i][j-1].has_bottom_wall = False
             # Move Bottom
             else:
                 self.__cells[i][j].has_bottom_wall = False
-                self.__cells[col][row].has_top_wall = False
+                self.__cells[i][j+1].has_top_wall = False
 
             self.__break_walls_r(col, row)
