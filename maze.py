@@ -115,11 +115,10 @@ class Maze():
                 col.visited = False
 
     def solve(self):
-        self._solve_r(0, 0)
+        return self.__solve_r(0, 0)
 
-    def _solve_r(self, i, j):
+    def __solve_r(self, i, j):
         if self.__cells[i][j] is self.__at_exit:
-            print("At Exit")
             return True
 
         self.__animate()
