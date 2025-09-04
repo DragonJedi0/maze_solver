@@ -26,6 +26,7 @@ class Maze():
             random.seed(seed)
 
         self.__create_cells()
+        self.__at_exit = self.__cells[self.__num_cols - 1][self.__num_rows - 1]
         self.__break_entrance_and_exit()
         self.__break_walls_r(0, 0)
         self.__reset_cells_visited()
@@ -114,7 +115,14 @@ class Maze():
                 col.visited = False
 
     def solve(self):
-        self._solve_r()
+        self._solve_r(0, 0)
 
-    def _solve_r(self):
-        print("I can't see the maze yet, you dingus.")
+    def _solve_r(self, i, j):
+        if self.__cells[i][j] is self.__at_exit:
+            print("At Exit")
+            return True
+
+        self.__animate()
+        self.__cells[i][j].visited = True
+
+        return False
