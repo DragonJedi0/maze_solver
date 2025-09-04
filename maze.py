@@ -124,4 +124,6 @@ class Maze():
         self.__animate()
         self.__cells[i][j].visited = True
 
+        #TODO: Move through the maze
+
         return False

@@ -5,8 +5,8 @@ def main():
     win = Window(900, 700)
 
     margin = 50
-    maze_height = 1
-    maze_width = 1
+    maze_height = 12
+    maze_width = 16
     cell_width = 50
     cell_height = 50
 
