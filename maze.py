@@ -50,12 +50,7 @@ class Maze():
         # Draw cell 
         self.__cells[i][j].draw(pos_x1, pos_y1, pos_x2, pos_y2)
 
-        self.__animate()
-
-    def __animate(self):
-        if (self.__win is not None):
-            self.__win.redraw()
-        time.sleep(0.005)
+        self.__animate(True)
 
     def __break_entrance_and_exit(self):
         last_row = len(self.__cells) - 1
@@ -63,7 +58,7 @@ class Maze():
         # Remove top left cell wall as entrance
         self.__cells[0][0].has_top_wall = False
         # Remove bottom right cell wall as exit
-        self.__cells[last_row][last_col].has_bottom_wall = False
+        self.__at_exit.has_bottom_wall = False
 
     def __break_walls_r(self, i, j):
         self.__cells[i][j].visited = True
@@ -86,7 +81,7 @@ class Maze():
                 self.__draw_cell(i, j)
                 return
             else:
-                dir = random.randint(0,len(unvisited)-1)
+                dir = random.randrange(len(unvisited))
 
             col, row = unvisited[dir]
 
@@ -114,16 +109,84 @@ class Maze():
             for col in row:
                 col.visited = False
 
-    def solve(self):
-        return self.__solve_r(0, 0)
+    def __animate(self, creating=True, undo=False):
+        if (self.__win is not None):
+            self.__win.redraw()
+        if (creating):
+            time.sleep(0.00005)
+        elif (undo):
+            time.sleep(0.0005)
+        else:
+            time.sleep(0.125)
 
     def __solve_r(self, i, j):
+        def move_line(move_dir):
+            col, row = move_dir
+            self.__cells[i][j].draw_move(self.__cells[col][row])
+            self.__animate(False, False)
+            if (self.__solve_r(col, row) == True):
+                return True
+            else:
+                self.__cells[i][j].draw_move(self.__cells[col][row], True)
+                self.__animate(False, True)
+
+            return False
+
         if self.__cells[i][j] is self.__at_exit:
             return True
 
-        self.__animate()
         self.__cells[i][j].visited = True
+        # Can Move
+        move_dir = ()
+        move_left = True
+        move_right = True
+        move_up = True
+        move_down = True
+        if i == 0 and j == 0:
+            move_up = False
 
-        #TODO: Move through the maze
+        if j == 0:
+            move_left = False
+        if j == len(self.__cells[i])-1:
+            move_down = False
+        if i == 0:
+            move_up = False
+        if i == len(self.__cells)-1:
+            move_right = False
+
+        # Move Left
+        if (move_left and
+             not self.__cells[i][j].has_left_wall and
+             self.__cells[i-1][j].visited == False):
+            move_dir = (i-1, j)
+            if move_line(move_dir):
+                return True
+
+        # Move Right
+        if (move_right and
+             not self.__cells[i][j].has_right_wall and
+             self.__cells[i+1][j].visited == False):
+            move_dir = (i+1, j)
+            if move_line(move_dir):
+                return True
+
+        # Move Up
+        if (move_up and
+             not self.__cells[i][j].has_top_wall and
+               self.__cells[i][j-1].visited == False):
+            move_dir = (i, j-1)
+            if move_line(move_dir):
+                return True
+
+        # Move Down
+        if (move_down and
+             not self.__cells[i][j].has_bottom_wall and
+             self.__cells[i][j+1].visited == False):
+            move_dir = (i, j+1)
+            if move_line(move_dir):
+                return True
 
         return False
+
+    def solve(self):
+        return self.__solve_r(0,0)
