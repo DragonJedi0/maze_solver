@@ -57,8 +57,8 @@ class Cell():
             )
 
     def center(self):
-        x_center = (self.__x1 + self.__x2) / 2
-        y_center = (self.__y1 + self.__y2) / 2
+        x_center = abs(self.__x1 + self.__x2) // 2
+        y_center = abs(self.__y1 + self.__y2) // 2
 
         return Point(x_center, y_center) 
 
@@ -70,4 +70,4 @@ class Cell():
 
         move_line = Line(self.center(), to_cell.center())
         if (self.__win is not None):
-            self.__win.draw_line(move_line, "black")
+            self.__win.draw_line(move_line, fill)
